@@ -1,5 +1,4 @@
 import pandas as pd
-import sqlite3
 import numpy as np
 from datetime import datetime
 from pathlib import Path
@@ -11,7 +10,7 @@ from pathlib import Path
 fraud_data = pd.read_csv("../data/transactions.csv", sep=",", decimal=".")
 print("CSV geladen - Vorschau:")
 print(fraud_data.head())
-print("\nInfo:")
+print("\n Info:")
 print(fraud_data.info())
 
 # ============================================================
@@ -19,7 +18,7 @@ print(fraud_data.info())
 # ============================================================
 
 # Datenbereinigung: Überprüfung auf fehlende Werte
-print("\nFehlende Werte pro Spalte:")
+print("\n Fehlende Werte pro Spalte:")
 print(fraud_data.isna().sum())
 
 # Datenbereinigung: Validierung binärer Merkmale (0/1)
