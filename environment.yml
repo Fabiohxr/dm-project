@@ -6,7 +6,6 @@ dependencies:
   - pandas
   - numpy
   - plotly
-  - jupyterlab
-
+  - neo4j-python-driver
 
 
