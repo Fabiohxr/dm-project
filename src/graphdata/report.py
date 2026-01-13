@@ -8,6 +8,13 @@ password = "babo2003"
 # Erstelle eine Neo4j-Session
 driver = GraphDatabase.driver(uri, auth=(user, password))
 
+# Zufällige Transaktions ID
+def pick_any_txid():
+    q = "MATCH (t:Transaction) RETURN t.Transaction_ID AS tx LIMIT 1;"
+    with driver.session() as session:
+        row = session.run(q).single()
+    return row["tx"] if row else None
+
 def knn_by_txid(txid, k=10):
     q = """
     MATCH (t:Transaction {Transaction_ID: $txid})
@@ -42,13 +49,6 @@ def similar_frauds(txid, k=50, top=10):
         rows = [r.data() for r in session.run(q, {"txid": txid, "k": k, "top": top})]
     return rows
 
-# Zufällige Transaktions ID
-def pick_any_txid():
-    q = "MATCH (t:Transaction) RETURN t.Transaction_ID AS tx LIMIT 1;"
-    with driver.session() as session:
-        row = session.run(q).single()
-    return row["tx"] if row else None
-
 txid = pick_any_txid()
 print("Nutze TX:", txid)
 
@@ -56,7 +56,7 @@ neighbors = knn_by_txid(txid, k=10)
 for n in neighbors:
     print(n["tx"], n["amount"], n["risk"], n["fraud"], n["score"])
 
-
+# Anzahl unterschiedlicher Werte je Label (Kontrolle)
 def counts_by_label():
     q = """
     MATCH (n)
@@ -66,6 +66,7 @@ def counts_by_label():
     with driver.session() as session:
         return [r.data() for r in session.run(q)]
 
+# User mit der höchsten Fraud-Rate
 def top_users_by_fraud(limit=20, min_tx=10):
     q = """
     MATCH (u:User)-[:MADE]->(t:Transaction)
@@ -80,6 +81,7 @@ def top_users_by_fraud(limit=20, min_tx=10):
     with driver.session() as session:
         return [r.data() for r in session.run(q, {"limit": limit, "min_tx": min_tx})]
 
+# Fraud-Rate nach Device
 def fraud_rate_by_device(limit=20):
     q = """
     MATCH (t:Transaction)-[:USING_DEVICE]->(d:DeviceType)
@@ -93,6 +95,7 @@ def fraud_rate_by_device(limit=20):
     with driver.session() as session:
         return [r.data() for r in session.run(q, {"limit": limit})]
 
+# Top Transaktionen mit den Meisten fehlgeschlagenen Transaktionen der vergangenen 7 Tage
 def top_failed_transactions(limit=50):
     q = """
     MATCH (t:Transaction)
