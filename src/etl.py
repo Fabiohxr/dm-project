@@ -57,20 +57,25 @@ for col in numeric_cols:
     if col in fraud_data.columns:
         fraud_data[col] = pd.to_numeric(fraud_data[col], errors="coerce")
 
-# Datenbereinigung: Prüfung ob numerische Werte nach der Formatierung NaNs enthalten
+# Datenbereinigung: Prüfen, ob numerische Werte nach der Formatierung NaNs enthalten
 num_nan = fraud_data.select_dtypes(include=["number"]).isna().sum()
 
 print("\n Numerische Spalten mit NaNs:")
 print(num_nan[num_nan > 0])
 
-# Datenqualitätsprüfung → Rejects
+# Datenqualitätsprüfung → Rejects (Nur wirklich unbrauchbare Daten)
 reject_mask = (
     fraud_data["Transaction_ID"].isna() |
     fraud_data["User_ID"].isna() |
     fraud_data["Timestamp"].isna() |
     fraud_data["Transaction_Amount"].isna() |
-    (fraud_data["Transaction_Amount"] < 0) |
-    fraud_data["Fraud_Label"].isna()
+    fraud_data["Fraud_Label"].isna() |
+    (fraud_data["Transaction_Amount"] <= 0) |
+    (fraud_data["Daily_Transaction_Count"] < 0) |
+    (fraud_data["Failed_Transaction_Count_7d"] < 0) |
+    (fraud_data["Avg_Transaction_Amount_7d"] < 0) |
+    (fraud_data["Card_Age"] < 0) |
+    (fraud_data["Transaction_Distance"] < 0)
 )
 Rejects = fraud_data[reject_mask].copy()
 # Speicherung ohne Rejects in Clean_data für weitere Arbeit
@@ -78,7 +83,7 @@ Clean_data = fraud_data[~reject_mask].copy()
 print(f"\n TRANSFORM – Clean: {len(Clean_data)} | Rejects: {len(Rejects)}")
 
 # Datenbereinigung: Prüfung auf leere oder whitespace-only Strings in Textspalten
-obj_cols = Clean_data.select_dtypes(include=["object"]).columns
+obj_cols = Clean_data.select_dtypes(include=["object", "string"]).columns
 empty_counts = (
     Clean_data[obj_cols]
     .apply(lambda col: col.astype(str).str.strip().eq(""))
@@ -86,6 +91,18 @@ empty_counts = (
 )
 print("\n Leere Strings (nicht NaN):")
 print(empty_counts[empty_counts > 0])
+
+# Alle Objects, bzw. kategorische vars in lower case
+for col in obj_cols:
+    Clean_data[col] = (
+        Clean_data[col]
+        .astype("string")   # sicher bei NaN
+        .str.strip()        # führende / folgende Leerzeichen weg
+        .str.lower()        # alles lowercase
+    )
+
+print("\n Kategoriale Spalten normalisiert:")
+print(obj_cols.tolist())
 
 # ------ Feature Engineering -------
 
