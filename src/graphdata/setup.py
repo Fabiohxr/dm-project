@@ -21,11 +21,11 @@ vector_features = [
 X = df[vector_features].astype(float).values
 X = StandardScaler().fit_transform(X)
 
-# Vektor als einzelne Spalten (APOC-frei, skriptkonform)
+# Vektor als einzelne Spalten
 for i in range(X.shape[1]):
     df[f"emb_{i}"] = X[:, i]
 
-
+# Export für Neo4j
 neo4j_import_path = r"/Users/fabioheuser/Library/Application Support/neo4j-desktop/Application/Data/dbmss/dbms-a1255a9a-1d62-48e4-995b-09bd77095057/import/transactions_vec.csv"
 df.to_csv(neo4j_import_path, index=False)
 print("CSV für Neo4j exportiert")
@@ -119,7 +119,7 @@ IN TRANSACTIONS OF 1000 ROWS
 RETURN count(ok) AS batches;
 """
 
-# Optional: Bestätigen, dass die Daten geladen wurden
+# Bestätigen, dass die Daten geladen wurden
 def check_data():
     query_check = """
     MATCH (u:User)-[:MADE]->(t:Transaction)
@@ -136,6 +136,7 @@ def check_data():
         for record in result:
             print(record["User"], record["Transaction"], record["Amount"], record["RiskScore"], record["FraudLabel"])
 
+# Lade nur einmal. Falls Daten schon importiert wurden kein neuer Import.
 if not has_data():
     execute_query(query)
     ensure_vector_index()

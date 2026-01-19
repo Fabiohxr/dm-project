@@ -60,7 +60,7 @@ numeric_features = [
     "Transaction_Distance",
 ]
 
-# Transforming (OneHotEncoding für kategorische vars)
+# OneHotEncoding für kategorische vars
 preprocess = ColumnTransformer(
     transformers=[
         ("cat", OneHotEncoder(handle_unknown="ignore"), categorical_features),
@@ -105,7 +105,7 @@ print("ROC-AUC:", roc_auc_score(y_test, y_proba))
 print("\n Confusion Matrix:\n", confusion_matrix(y_test, y_pred))
 print("\n Classification Report:\n", classification_report(y_test, y_pred, digits=4))
 
-# Feature Importances (mit OHE-Namen)
+# Feature Importances / Gewichtung
 ohe = model.named_steps["preprocess"].named_transformers_["cat"]
 cat_names = ohe.get_feature_names_out(categorical_features)
 all_feature_names = np.concatenate([cat_names, np.array(numeric_features)])
@@ -116,21 +116,21 @@ fi = pd.Series(importances, index=all_feature_names).sort_values(ascending=False
 print("\n Top 20 Feature Importances:")
 print(fi.head(20))
 
-# 1) Feature-Namen in Modell-Reihenfolge
+# Feature-Namen in Modell-Reihenfolge
 ohe = model.named_steps["preprocess"].named_transformers_["cat"]
 cat_names = ohe.get_feature_names_out(categorical_features)
 all_names = list(cat_names) + numeric_features
 
 fi = pd.Series(model.named_steps["rf"].feature_importances_, index=all_names)
 
-# 2) Aggregation: Kategorien aufsummieren, Numerik 1:1
+# Aggregation: Kategorien aufsummieren
 fi_agg = {}
 
 # kategorische Variablen: summe über alle OneHot-Spalten, die mit "Feature_" anfangen
 for f in categorical_features:
     fi_agg[f] = fi[fi.index.str.startswith(f + "_")].sum()
 
-# numerische Variablen: genau den Feature-Namen nehmen (mit underscores, bleibt intakt!)
+# numerische Variablen: genau den Feature-Namen nehmen 
 for f in numeric_features:
     fi_agg[f] = fi.get(f, 0.0)
 

@@ -15,6 +15,7 @@ def pick_any_txid():
         row = session.run(q).single()
     return row["tx"] if row else None
 
+# k-nearest-neighbour mit TransactionID
 def knn_by_txid(txid, k=10):
     q = """
     MATCH (t:Transaction {Transaction_ID: $txid})
@@ -34,6 +35,7 @@ def knn_by_txid(txid, k=10):
     return rows
 
 # Abfragen
+# Aehnliche Transaktionen mit Fraud_Label positiv
 def similar_frauds(txid, k=50, top=10):
     q = """
     MATCH (t:Transaction {Transaction_ID: $txid})
@@ -49,6 +51,7 @@ def similar_frauds(txid, k=50, top=10):
         rows = [r.data() for r in session.run(q, {"txid": txid, "k": k, "top": top})]
     return rows
 
+#Random Transaktionen (für Demo)
 txid = pick_any_txid()
 print("Nutze TX:", txid)
 
@@ -111,7 +114,7 @@ def top_failed_transactions(limit=50):
     with driver.session() as session:
         return [r.data() for r in session.run(q, {"limit": limit})]
 
-
+#Abbildung in Console
 print("\nLabel Counts:", counts_by_label())
 print("\nTop Users:", top_users_by_fraud(10)[:5])
 print("\nFraud by Device:", fraud_rate_by_device(10)[:5])

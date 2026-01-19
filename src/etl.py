@@ -78,7 +78,7 @@ reject_mask = (
     (fraud_data["Transaction_Distance"] < 0)
 )
 Rejects = fraud_data[reject_mask].copy()
-# Speicherung ohne Rejects in Clean_data für weitere Arbeit
+# Speicherung bereinigter Teil in Clean_data für weitere Arbeit
 Clean_data = fraud_data[~reject_mask].copy()
 print(f"\n TRANSFORM – Clean: {len(Clean_data)} | Rejects: {len(Rejects)}")
 
@@ -96,16 +96,15 @@ print(empty_counts[empty_counts > 0])
 for col in obj_cols:
     Clean_data[col] = (
         Clean_data[col]
-        .astype("string")   # sicher bei NaN
-        .str.strip()        # führende / folgende Leerzeichen weg
-        .str.lower()        # alles lowercase
+        .astype("string")
+        .str.strip()
+        .str.lower()
     )
 
 print("\n Kategoriale Spalten normalisiert:")
 print(obj_cols.tolist())
 
 # ------ Feature Engineering -------
-
 # Datenanreicherung: daytime extrahieren aus timestemp
 Clean_data["Hour"] = Clean_data["Timestamp"].dt.hour
 
@@ -116,12 +115,12 @@ if "Account_Balance" in Clean_data.columns:
         Clean_data["Account_Balance"].replace(0, np.nan)
     ).fillna(0)
 
-# Löschen von Timestamp, da Aufteilung in hour und isWeekend --> Relevanter für weiteren Prozess
+# Löschen von Timestamp, da Aufteilung in hour und isWeekend -> Relevanter für weiteren Prozess
 Clean_data.drop(columns=["Timestamp"], inplace=True)
 
 print("\n", Clean_data.info())
 
-# Datenaggregation + Datenanreicherung: Wichtige Userdaten --> Eventuell wichtig für Analysen
+# Datenaggregation + Datenanreicherung: Wichtige Userdaten -> Eventuell wichtig für Analysen
 user_aggregation = (
     Clean_data
     .groupby("User_ID")
@@ -169,23 +168,23 @@ for i, c in enumerate(Clean_data.columns):
 # LOAD
 # ============================================================
 
-# Sicherstellen, dass Zielverzeichnis existiert (optional, aber sauber)
+# Sicherstellen, dass Zielverzeichnis existiert
 output_dir = Path("../data/cleaned")
 output_dir.mkdir(parents=True, exist_ok=True)
 
-# Bereinigte Transaktionsdaten (Analyse- / Faktentabelle)
+# Bereinigte Transaktionsdaten speichern
 Clean_data.to_csv(
     output_dir / "clean_transactions.csv",
     index=False
 )
 
-# Abgelehnte Datensätze (Datenqualitäts-Transparenz)
+# Abgelehnte Datensätze speichern
 Rejects.to_csv(
     output_dir / "rejects.csv",
     index=False
 )
 
-# Aggregierte Kundensicht (Dimension / Analyse)
+# Aggregierte Kundensicht speichern
 user_aggregation.to_csv(
     output_dir / "user_aggregation.csv",
     index=False

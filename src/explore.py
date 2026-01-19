@@ -1,7 +1,7 @@
 import pandas as pd
 import plotly.express as px
 
-# Einlesen des gecleanten Datasets
+# Einlesen des cleaned Datasets
 df = pd.read_csv("../data/cleaned/clean_transactions.csv")
 df["Fraud_Label_str"] = df["Fraud_Label"].map({0: "Non-Fraud", 1: "Fraud"})
 
