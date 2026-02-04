@@ -13,8 +13,12 @@ def run_etl():
     load_data(clean_df, rejects_df, OUTPUT_DIR)
 
 def run_neo4j():
-    import_transactions_to_neo4j()
-    run_demo()
+    try:
+        import_transactions_to_neo4j()
+        run_demo()
+    except Exception as e:
+        print("⚠️ Neo4j nicht verfügbar – überspringe Graph-Teil.")
+        print(e)
 
 def run_explore():
     explore()

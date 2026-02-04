@@ -7,5 +7,6 @@ dependencies:
   - numpy
   - plotly
   - neo4j-python-driver
+  - scikit-learn
 
 
