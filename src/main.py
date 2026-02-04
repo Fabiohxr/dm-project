@@ -17,7 +17,7 @@ def run_neo4j():
         import_transactions_to_neo4j()
         run_demo()
     except Exception as e:
-        print("⚠️ Neo4j nicht verfügbar – überspringe Graph-Teil.")
+        print("Neo4j nicht verfügbar – überspringe Graph-Teil.")
         print(e)
 
 def run_explore():
