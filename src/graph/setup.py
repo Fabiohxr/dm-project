@@ -6,11 +6,11 @@ from src.config import (
     NEO4J_IMPORT_PATH,
     NEO4J_URI,
     NEO4J_USER,
-    NEO4J_PASSWORD
+    NEO4J_PASSWORD, CLEAN_TRANSACTIONS_PATH
 )
 
 def import_transactions_to_neo4j(
-    input_csv_path: str = "../data/cleaned/clean_transactions.csv",
+    input_csv_path: str = CLEAN_TRANSACTIONS_PATH,
     neo4j_import_path: str = NEO4J_IMPORT_PATH,
     neo4j_csv_url: str = "file:///transactions_vec.csv",
     uri: str = NEO4J_URI,
@@ -152,7 +152,7 @@ def import_transactions_to_neo4j(
             check_index_state()
             check_data()
         else:
-            print("✅ Daten sind schon importiert – überspringe Import.")
+            print("Daten sind schon importiert – überspringe Import.")
 
     finally:
         driver.close()

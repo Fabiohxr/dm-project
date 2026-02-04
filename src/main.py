@@ -1,12 +1,11 @@
-# main.py
-from etl.extract import extract_transactions
-from etl.transform import transform_transactions
-from etl.load import load_data
-from graph.setup import import_transactions_to_neo4j
-from graph.report import run_demo
-from explore.explore import explore
-from randomforest.model_random_forest import random_forest
-from config import OUTPUT_DIR
+from src.etl.extract import extract_transactions
+from src.etl.transform import transform_transactions
+from src.etl.load import load_data
+from src.graph.setup import import_transactions_to_neo4j
+from src.graph.report import run_demo
+from src.explore.explore import explore
+from src.randomforest.model_random_forest import random_forest
+from src.config import OUTPUT_DIR
 
 def run_etl():
     raw_df = extract_transactions()
