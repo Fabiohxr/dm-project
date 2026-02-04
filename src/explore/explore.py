@@ -6,7 +6,6 @@ import plotly.express as px
 from src.config import CLEAN_TRANSACTIONS_PATH
 
 # Einlesen des cleaned Datasets
-ROOT = Path(__file__).resolve().parents[2]  # dm-project
 
 def explore(path: Path = CLEAN_TRANSACTIONS_PATH):
     df = pd.read_csv(path)
