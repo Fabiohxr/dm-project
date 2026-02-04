@@ -7,12 +7,12 @@ from src.config import CLEAN_TRANSACTIONS_PATH
 
 # Einlesen des cleaned Datasets
 ROOT = Path(__file__).resolve().parents[2]  # dm-project
-# df = pd.read_csv(ROOT / "data" / "cleaned" / "clean_transactions.csv")
-# df["Fraud_Label_str"] = df["Fraud_Label"].map({0: "Non-Fraud", 1: "Fraud"})
 
 def explore(path: Path = CLEAN_TRANSACTIONS_PATH):
     df = pd.read_csv(path)
     df["Fraud_Label_str"] = df["Fraud_Label"].map({0: "Non-Fraud", 1: "Fraud"})
+
+
     # Imbalance zwischen Fraud und non-Fraud
     fig = px.histogram(
         df,
