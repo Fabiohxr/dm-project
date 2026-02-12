@@ -1,6 +1,6 @@
 from pathlib import Path
 
-# Project paths (reproducible across machines)
+# Project paths
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
