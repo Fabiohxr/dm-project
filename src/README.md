@@ -30,7 +30,7 @@ If you do not use Neo4j, you can leave these as placeholders.
 From the project root:
 
 ```bash
-python src/main.py
+python -m src.main
 ```
 
 This will:
