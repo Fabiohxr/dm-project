@@ -13,7 +13,7 @@ CLEAN_TRANSACTIONS_PATH = OUTPUT_DIR / "clean_transactions.csv"
 REJECTS_PATH = OUTPUT_DIR / "rejects.csv"
 USER_AGG_PATH = OUTPUT_DIR / "user_aggregation.csv"
 
-# Neo4j configuration (replace placeholders)
+# Neo4j configuration (Platzhalter ersetzen!)
 
 NEO4J_URI = "bolt://localhost:7687"
 NEO4J_USER = "neo4j"
