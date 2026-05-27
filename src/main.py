@@ -29,5 +29,5 @@ def run_random_forest():
 if __name__ == "__main__":
     run_etl()
     run_neo4j()
-    run_explore()
+    #run_explore()
     run_random_forest()
