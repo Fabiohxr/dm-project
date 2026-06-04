@@ -9,8 +9,8 @@ from src.config import OUTPUT_DIR
 
 def run_etl():
     raw_df = extract_transactions()
-    clean_df, rejects_df = transform_transactions(raw_df)
-    load_data(clean_df, rejects_df, OUTPUT_DIR)
+    clean_df, rejects_df, users_df = transform_transactions(raw_df)
+    load_data(clean_df, rejects_df, users_df, OUTPUT_DIR)
 
 def run_neo4j():
     try:

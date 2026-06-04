@@ -1,5 +1,5 @@
 # Transaction Fraud Detection Pipeline
-
+Reproductible using specific dataset located in the data folder
 ## Installation
 
 Create the conda environment:

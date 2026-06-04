@@ -201,9 +201,9 @@ def transform_transactions(df: pd.DataFrame):
 
     Clean_data = _feature_engineering(Clean_data)
 
-    _ = _user_aggregation(Clean_data)
+    Users = _user_aggregation(Clean_data)
 
     Clean_data = _reorder_columns(Clean_data)
 
-    return Clean_data, Rejects
+    return Clean_data, Rejects, Users
 
