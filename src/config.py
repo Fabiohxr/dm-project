@@ -9,7 +9,7 @@ OUTPUT_DIR = DATA_DIR / "cleaned"
 
 DATA_PATH = DATA_DIR / "transactions.csv"
 
-CLEAN_TRANSACTIONS_PATH = OUTPUT_DIR / "clean_transactions.csv"
+CLEAN_TRANSACTIONS_PATH = OUTPUT_DIR / "financial_fraud_dataset_1.csv"
 REJECTS_PATH = OUTPUT_DIR / "rejects.csv"
 USER_AGG_PATH = OUTPUT_DIR / "user_aggregation.csv"
 
